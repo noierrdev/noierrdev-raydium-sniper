@@ -65,6 +65,7 @@ function connectGeyser(){
                     const transaction=data.transaction.transaction;
                     if(transaction.meta.logMessages.some(log=>log.includes("InitializeMint")||log.includes("initialize2"))){
                         console.log("Initialized!!!")
+                        console.log(`https://solscan.io/tx/${sig}`)
                         var raydiumPoolProgramIndex=0;
                         const allAccounts=[];
                         transaction.transaction.message.accountKeys.map((account,index)=>{
