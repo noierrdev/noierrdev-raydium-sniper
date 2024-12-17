@@ -1,0 +1,25 @@
+{
+  "name": "noierrdev-pumpfun-sniper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon .",
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@matrixai/quic": "^1.3.0",
+    "@peculiar/webcrypto": "^1.5.0",
+    "@raydium-io/raydium-sdk": "^1.3.1-beta.58",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.8",
+    "@triton-one/yellowstone-grpc": "^0.6.0",
+    "dotenv": "^16.4.7",
+    "nodemon": "^3.1.7",
+    "selfsigned": "^2.4.1"
+  }
+}
