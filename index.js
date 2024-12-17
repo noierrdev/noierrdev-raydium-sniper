@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const {Connection, PublicKey, Keypair}=require("@solana/js")
+const {Connection, PublicKey, Keypair}=require("@solana/web3.js")
 const fs=require('fs')
 const path=require('path')
 const WebSocket = require('ws');
