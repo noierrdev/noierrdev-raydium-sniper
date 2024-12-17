@@ -72,11 +72,8 @@ function connectGeyser(){
                             if(!account) return;
                             const accountID=bs58.encode(account);
                             allAccounts.push(accountID);
-                            if(accountID==process.env.RAYDIUM_OPENBOOK_AMM){
+                            if(accountID==RAYDIUM_OPENBOOK_AMM){
                                 raydiumPoolProgramIndex=index;
-                            }
-                            if(accountID==PUMPFUN_RAYDIUM_MIGRATION){
-                                from_pumpfun=true;
                             }
                         })
                         const swapInstruction = (transaction?.transaction.message.instructions).find(instruction =>instruction.programIdIndex==raydiumPoolProgramIndex);
@@ -231,25 +228,6 @@ function connectGeyser(){
                         }
                         solAmount=solAmountData.value.uiAmount;
                         console.log({solAmount})
-                        // geyserMarkets[targetToken]=poolInfos;
-                        // var geyserMonitorProcess=fork(geyserMonitorPath);
-                        // geyserMonitorProcess.send({token:targetToken,quoted:quoted,poolKeys:poolInfos,initLP:solAmount});
-                        // geyserMonitorProcess.on("exit",()=>{
-                        //     console.log("EXITED");
-                        //     // delete geyserMarkets[targetToken]
-                        // })
-                        // await swapTokenRapid(targetToken,poolInfos,0.1,true);
-                        // var largestHoldersStr=`\n`;
-                        // for(var oneHolder of largestHoldersData.value){
-                        //     largestHoldersStr+=`<a href="https://solscan.io/account/${oneHolder.address.toBase58()}" >${oneHolder.address.toBase58()}</a> <b>${(oneHolder.uiAmount/(Number(tokenInfo.supply)/(10**(tokenInfo.decimals+2)))).toFixed(2)}%</b>\n`
-                        // }
-                        // largestHoldersStr+=`\n`                
-                        
-                        // myBotClients.forEach(oneClient=>{
-                        //     myBot.api.sendMessage(oneClient,
-                        //     `<b>💥 New Pool from GEYSER 💥</b>\n\n<b>Mint : </b>\n<code>${targetToken}</code>\n\n<b>Quoted : </b>${quoted?"✅":"❌"}\n\n<b>LP Value : </b><b>${solAmount}</b> SOL \n\n<b>Dangerous : </b>${dangerous?"✅":"❌"}\n<b>The Largest Holders : </b>\n${largestHoldersStr}<a href="https://solscan.io/tx/${sig}" >LP</a> | <a href="https://photon-sol.tinyastro.io/en/lp/${poolInfos.id.toString()}">Photon</a> | <a href="https://dexscreener.com/solana/${poolInfos.id.toString()}?maker=${wallet.publicKey.toBase58()}" >DexScreener</a> \n`,
-                        //     {parse_mode:"HTML",link_preview_options:{is_disabled:true}})
-                        // })
                     }
 
                 }
