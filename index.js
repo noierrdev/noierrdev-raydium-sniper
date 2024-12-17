@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const {Connection, PublicKey, Keypair}=require("@solana/web3.js")
+const {Connection, PublicKey, Keypair}=require("@solana/js")
 const fs=require('fs')
 const path=require('path')
 const WebSocket = require('ws');
@@ -99,11 +99,11 @@ function connectGeyser(){
                         const marketAccountKey= bs58.encode(transaction.transaction.message.accountKeys[accounts[marketKeyIndex]]);
                         const targetToken=(tokenAAccount==SOL_MINT_ADDRESS)?tokenBAccount:tokenAAccount;
                         const quoted=(tokenAAccount==SOL_MINT_ADDRESS)?true:false;
-                        var tokenInfoData=await connection.getParsedAccountInfo(new web3.PublicKey(targetToken),"processed");
+                        var tokenInfoData=await connection.getParsedAccountInfo(new PublicKey(targetToken),"processed");
                         var timer=0;
                         if(!tokenInfoData.value) while(!tokenInfoData.value){
                             console.log(`NO TOKENINFO!!!`)
-                            tokenInfoData=await connection.getParsedAccountInfo(new web3.PublicKey(targetToken),"processed");;
+                            tokenInfoData=await connection.getParsedAccountInfo(new PublicKey(targetToken),"processed");;
                             timer++;
                             if(timer>100) break;
                         }
@@ -122,7 +122,7 @@ function connectGeyser(){
                         }
                         console.log(tokenInfo)
                         console.log({targetToken,quoted})
-                        var largestHoldersData=await connection.getTokenLargestAccounts(new web3.PublicKey(targetToken),"processed");
+                        var largestHoldersData=await connection.getTokenLargestAccounts(new PublicKey(targetToken),"processed");
 
                         const theLargestHolder=await connection.getParsedAccountInfo(largestHoldersData.value[0].address,"processed");
                         const theLargestOwner=theLargestHolder?.value?.data?.parsed?.info?.owner;
@@ -138,14 +138,14 @@ function connectGeyser(){
                         
                         poolsFromPumpfun[bs58.encode(transaction.transaction.message.accountKeys[accounts[4]])]=targetToken;
                         var [baseMintAccount, quoteMintAccount,marketAccount] = await connection.getMultipleAccountsInfo([
-                            new web3.PublicKey(tokenAAccount),
-                            new web3.PublicKey(tokenBAccount),
-                            new web3.PublicKey(marketAccountKey),
+                            new PublicKey(tokenAAccount),
+                            new PublicKey(tokenBAccount),
+                            new PublicKey(marketAccountKey),
                         ],"processed");
                         timer=0;
                         if(!baseMintAccount) while (!baseMintAccount) {
                             console.log("NO BASEMINT ACCOUNT!!!!")
-                            baseMintAccount=await connection.getAccountInfo(new web3.PublicKey(tokenAAccount));
+                            baseMintAccount=await connection.getAccountInfo(new PublicKey(tokenAAccount));
                             timer++;
                             if(timer>100) break;
                         }
@@ -153,7 +153,7 @@ function connectGeyser(){
                         timer=0;
                         if(!quoteMintAccount) while (!quoteMintAccount) {
                             console.log("NO QUOTEMINT ACCOUNT!!!!")
-                            quoteMintAccount=await connection.getAccountInfo(new web3.PublicKey(tokenBAccount));
+                            quoteMintAccount=await connection.getAccountInfo(new PublicKey(tokenBAccount));
                             timer++;
                             if(timer>100) break;
                         }
@@ -162,7 +162,7 @@ function connectGeyser(){
                         
                         if(!marketAccount) while (!marketAccount) {
                             console.log("NO MARKET ACCOUNT!!!!")
-                            marketAccount=await connection.getAccountInfo(new web3.PublicKey(marketAccountKey));
+                            marketAccount=await connection.getAccountInfo(new PublicKey(marketAccountKey));
                             timer++;
                             if(timer>10000) break;
                         }
@@ -173,26 +173,26 @@ function connectGeyser(){
                             const quoteMintInfo = SPL_MINT_LAYOUT.decode(quoteMintAccount.data)
                             const marketInfo = MARKET_STATE_LAYOUT_V3.decode(marketAccount.data)
                             poolInfos={
-                                id: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[4]])),
-                                baseMint: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[8]])),
-                                quoteMint: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[9]])),
-                                lpMint: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[7]])),
+                                id: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[4]])),
+                                baseMint: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[8]])),
+                                quoteMint: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[9]])),
+                                lpMint: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[7]])),
                                 baseDecimals: baseMintInfo.decimals,
                                 quoteDecimals: quoteMintInfo.decimals,
                                 lpDecimals: baseMintInfo.decimals,
                                 version: 4,
-                                programId: new web3.PublicKey("675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",""),
-                                authority: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[5]])),
-                                openOrders: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[6]])),
-                                targetOrders: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[12]])),
-                                baseVault: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[10]])),
-                                quoteVault: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[11]])),
-                                withdrawQueue: web3.PublicKey.default,
-                                lpVault: web3.PublicKey.default,
+                                programId: new PublicKey("675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",""),
+                                authority: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[5]])),
+                                openOrders: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[6]])),
+                                targetOrders: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[12]])),
+                                baseVault: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[10]])),
+                                quoteVault: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[11]])),
+                                withdrawQueue: PublicKey.default,
+                                lpVault: PublicKey.default,
                                 marketVersion: 3,
                                 marketProgramId: marketAccount.owner,
-                                marketId: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[16]])),
-                                marketAuthority: Market.getAssociatedAuthority({ programId: marketAccount.owner, marketId: new web3.PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[16]])) }).publicKey,
+                                marketId: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[16]])),
+                                marketAuthority: Market.getAssociatedAuthority({ programId: marketAccount.owner, marketId: new PublicKey(bs58.encode(transaction.transaction.message.accountKeys[accounts[16]])) }).publicKey,
                                 marketBaseVault: marketInfo.baseVault,
                                 marketQuoteVault: marketInfo.quoteVault,
                                 marketBids: marketInfo.bids,
